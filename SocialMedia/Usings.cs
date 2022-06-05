@@ -16,3 +16,5 @@ global using Newtonsoft.Json;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.OpenApi.Models;
+global using System.ComponentModel.DataAnnotations;
+global using  Microsoft.AspNetCore.Authorization;

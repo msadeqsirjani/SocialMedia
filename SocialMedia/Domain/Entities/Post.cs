@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using SocialMedia.Domain.Common;
+﻿using SocialMedia.Domain.Common;
 
 namespace SocialMedia.Domain.Entities;
 

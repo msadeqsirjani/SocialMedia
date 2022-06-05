@@ -18,7 +18,7 @@ public interface IServiceAsync<T> : IService<T> where T : BaseEntity, new()
 
 public class ServiceAsync<T> : Service<T>, IServiceAsync<T> where T : BaseEntity, new()
 {
-    public ServiceAsync(IRepositoryAsync<T> repository) : base(repository)
+    public ServiceAsync(IRepositoryAsync<T> repository, IUnitOfWorkAsync unitOfWork) : base(repository, unitOfWork)
     {
     }
 

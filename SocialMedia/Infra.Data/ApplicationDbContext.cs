@@ -6,6 +6,11 @@ namespace SocialMedia.Infra.Data;
 
 public class ApplicationDbContext : DbContext
 {
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+
+    }
+
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Post> Posts { get; set; } = null!;
 
@@ -50,12 +55,12 @@ public class ApplicationDbContext : DbContext
 
         var records = ChangeTracker.Entries();
         var entityEntries = records.ToList();
-        
+
         var addedEntries = entityEntries.Where(x => x.State == EntityState.Added)
             .Select(x => x.Entity)
             .OfType<BaseEntity>()
             .ToList();
-        
+
         var updatedEntries = entityEntries.Where(x => x.State == EntityState.Modified)
             .Select(x => x.Entity)
             .OfType<BaseEntity>()

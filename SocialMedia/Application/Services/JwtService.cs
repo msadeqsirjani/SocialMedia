@@ -5,7 +5,7 @@ namespace SocialMedia.Application.Services;
 
 public interface IJwtService
 {
-    Task<JwtTokenDto> GenerateJwtToken(Guid userId, string username, bool administrator);
+    Task<JwtTokenDto> GenerateJwtTokenAsync(Guid userId, string username);
 }
 
 public class JwtService : IJwtService
@@ -20,7 +20,7 @@ public class JwtService : IJwtService
         _options = options.Value;
     }
 
-    public Task<JwtTokenDto> GenerateJwtToken(Guid userId, string username, bool administrator)
+    public Task<JwtTokenDto> GenerateJwtTokenAsync(Guid userId, string username)
     {
         var expires = DateTime.UtcNow.AddDays(1);
         var expiry = expires.ToEpochTimeSpan().TotalSeconds.ToInt32();
@@ -28,7 +28,6 @@ public class JwtService : IJwtService
         {
             new(ClaimTypes.Name, username),
             new(ClaimTypes.NameIdentifier, userId.ToString()),
-            new(ClaimTypes.Role, administrator ? Administrator : Other),
             new(ClaimTypes.Expiration, expiry.ToString(CultureInfo.InvariantCulture))
         };
         var secretKey = Encoding.UTF8.GetBytes(_options.IssuerSigningKey);

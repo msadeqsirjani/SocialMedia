@@ -26,10 +26,12 @@ public interface IService<T> where T : BaseEntity, new()
 public class Service<T> : IService<T> where T : BaseEntity, new()
 {
     protected readonly IRepositoryAsync<T> Repository;
+    protected readonly IUnitOfWorkAsync UnitOfWork;
 
-    public Service(IRepositoryAsync<T> repository)
+    public Service(IRepositoryAsync<T> repository, IUnitOfWorkAsync unitOfWork)
     {
         Repository = repository;
+        UnitOfWork = unitOfWork;
     }
 
     public virtual IEnumerable<T> Select() => Repository.Queryable(false);

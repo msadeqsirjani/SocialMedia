@@ -50,8 +50,6 @@ public static class DependencyContainer
         services.AddCors(options => options.AddPolicy("CorsPolicy",
             builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().Build()));
 
-        services.AddEndpointsApiExplorer();
-
         var setting = new JwtSetting();
 
         configuration.Bind("JwtSetting", setting);
@@ -95,18 +93,14 @@ public static class DependencyContainer
                 };
             });
 
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(JwtService.Administrator, builder => builder.RequireAssertion(context => context.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value == JwtService.Administrator));
-            options.AddPolicy(JwtService.Other, builder => builder.RequireAssertion(context => context.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value == JwtService.Other));
-        });
+        services.AddEndpointsApiExplorer();
 
         services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("docs", new OpenApiInfo
             {
                 Title = "Social Media API",
-                Version = "v1"
+                Version = "2.0",
             });
 
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -139,7 +133,7 @@ public static class DependencyContainer
                 }
             });
 
-            const string xmlFile = "TwitchNightFall.xml";
+            const string xmlFile = "SocialMedia.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             options.IncludeXmlComments(xmlPath);
         });
@@ -148,7 +142,7 @@ public static class DependencyContainer
     public static void UseApplications(this WebApplication application)
     {
         application.UseMiddleware<ExceptionHandler>();
-        application.UseSwagger();
+        application.UseSwagger(options => options.SerializeAsV2 = false);
         application.UseSwaggerUI(options =>
         {
             options.DocumentTitle = "Social Media API Documentation";
