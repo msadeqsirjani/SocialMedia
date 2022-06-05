@@ -40,7 +40,9 @@ public class PostService : ServiceAsync<Post>, IPostService
     {
         var posts = await Repository.Queryable(false)
             .Include(x => x.User)
-            .Select(x => new ShowPostDto()
+            .OrderByDescending(x => x.ModifiedAt)
+            .ThenByDescending(x => x.CreatedAt)
+            .Select(x => new ShowPostDto
             {
                 Id = x.Id,
                 Content = x.Content,
@@ -51,18 +53,16 @@ public class PostService : ServiceAsync<Post>, IPostService
             }).ToListAsync(cancellationToken);
 
         return Result.WithSuccess(posts);
-
-        return 
     }
 
     public async Task<Result> RemoveAsync(Guid id, Guid userId, CancellationToken cancellationToken = new())
     {
         var post = await Repository.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-        if(post == null)
+        if (post == null)
             return Result.WithMessage("Post not found");
 
-        if(post.UserId != userId)
+        if (post.UserId != userId)
             return Result.WithException("This post doesn't belong to you");
 
         await Repository.DeleteAsync(id, cancellationToken);
